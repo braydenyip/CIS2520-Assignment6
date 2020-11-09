@@ -6,11 +6,11 @@
 
 int main (int argc, char **argv) {
   FILE * fp;
-  if (argc != 2){
-    fprintf(stderr, "Usage: %s filename.kv capacity\n", "buildidx");
+  if (argc != 3){
+    fprintf(stderr, "Usage: %s filename.kv capacity\n", argv[0]);
     exit(-1);
   }
-  fp = fopen(argv[0], "r+");
+  fp = fopen(argv[1], "r+");
 
 
 
