@@ -32,7 +32,7 @@ int read_keyval( FILE *fp, char key[STRLEN], char val[STRLEN] )
   // fp is a binary file opened for reading
   // key, val are strings where the strings will be returned
   // returns the result of the sum of the two freads, normally 2
-  
+
   int retval = fread( key, STRLEN, 1, fp );
   retval += fread( val, STRLEN, 1, fp );
   return retval;
@@ -42,8 +42,9 @@ void write_empty( FILE *fp, long capacity )
   // write a hash file consisting of capacity -1 index values
 {
   int index=-1;
-  for (int i=0;i<capacity;i++)
+  for (int i=0;i<capacity;i++){
     fwrite( &index, sizeof(int), 1, fp );
+  }
 
   index = 4;
 
@@ -70,4 +71,3 @@ int read_index( FILE *fp, unsigned int hash, int *index )
   fseek( fp, hash*sizeof(int), SEEK_SET );
   return fread( index, sizeof(int), 1, fp );
 }
-
