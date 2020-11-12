@@ -55,17 +55,15 @@ int main (int argc, char **argv) {
   char value[STRLEN];
   int key_hash, value_hash;
   int i = 0;
-  int index = i;
+  int index = 0;
   // write nulls to the new files capacity times
   write_empty(fkhs, capacity);
   write_empty(fvhs, capacity);
 
-  while (!(feof(fp))) {
-    index = i;
+  while (read_keyval(fp, key, value) == 2) {
     // read the keyval pair
-    if(read_keyval(fp, key, value) != 2) {
-      break;
-    }
+    printf("%d\n",i );
+
     // find the hash values
     key_hash = hashfn(key, capacity);
     value_hash = hashfn(value, capacity);
@@ -73,22 +71,9 @@ int main (int argc, char **argv) {
     // write the indexes at the location of the hash values
     // TODO: make these into a general function?
 
-    while(read_index(fkhs, key_hash, &i) == -1) {
-      key_hash++;
-      if (key_hash == capacity) { // roll back to 0
-        key_hash = 0;
-      }
-    }
-    write_index(fkhs, i, key_hash);
-    while(read_index(fvhs, value_hash, &i) == -1) {
-      value_hash++;
-      if (value_hash == capacity) { // roll back to 0
-        value_hash = 0;
-      }
-    }
-    write_index(fvhs, i, value_hash);
-    i = index;
+    read_index
     i++;
+
   }
 
   free(filename_khs);

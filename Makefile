@@ -1,14 +1,37 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall -pedantic -g
 
-all: build_idx
+all: buildidx key2val
 
-build_idx: build_idx.o hashfn.o util.o
-	$(CC) $(CFLAGS) build_idx.o hashfn.o util.o -o build_idx
+buildidx: buildidx.o hashfn.o util.o
+	$(CC) $(CFLAGS) buildidx.o hashfn.o util.o -o buildidx
 
-build_idx.o: build_idx.c assignment6.h
-	$(CC) $(CFLAGS) build_idx.c -c
+buildidx.o: buildidx.c assignment6.h
+	$(CC) $(CFLAGS) buildidx.c -c
 
+key2val: key2val.o hashfn.o util.o
+	$(CC) $(CFLAGS) key2val.o hashfn.o util.o -o key2val
+
+key2val.o: key2val.c assignment6.h
+	$(CC) $(CFLAGS) key2val.c -c
+
+val2key: val2key.o hashfn.o util.o
+	$(CC) $(CFLAGS) val2key.o hashfn.o util.o -o val2key
+
+val2key.o: val2key.c assignment6.h
+	$(CC) $(CFLAGS) val2key.c -c
+
+actors: actors.o hashfn.o util.o
+	$(CC) $(CFLAGS) actors.o hashfn.o util.o -o actors
+
+actors.o: actors.c assignment6.h
+	$(CC) $(CFLAGS) actors.c -c
+
+bacon1: bacon1.o hashfn.o util.o
+	$(CC) $(CFLAGS) bacon1.o hashfn.o util.o -o bacon1
+
+bacon1.o: bacon1.c assignment6.h
+	$(CC) $(CFLAGS) bacon1.c -c
 
 hashfn.o: hashfn.c hashfn.h
 	$(CC) $(CFLAGS) hashfn.c -c
@@ -18,4 +41,4 @@ util.o: util.c util.h
 
 
 clean:
-	rm *.o build_idx
+	rm *.o buildidx key2val
