@@ -20,7 +20,21 @@ int main(int argc, char **argv) {
     exit(-1);
   }
 
+  char * filename_khs = replace_file_ending(argv[1], ".khs");
 
+  fkhs = fopen(filename_khs, "rb");
+  if (fkhs == NULL) {
+    fprintf(stderr, "Failed to open the file: %s\n", filename_khs);
+    free(filename_khs);
+    fclose(fp);
+    exit(-1);
+  }
+  int capacity = get_capacity(fkhs);
+  int search_hash = hashfn(search_term, capacity);
+  printf("%d\n", search_hash);
+
+  free(filename_khs);
+  fclose(fkhs);
   fclose(fp);
   return 0;
 }
