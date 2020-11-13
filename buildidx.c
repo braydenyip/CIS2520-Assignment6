@@ -5,24 +5,6 @@
 #include "util.h"
 #include "assignment6.h"
 
-
-
-int len_filename_no_ending(char * str) { // returns the index of the '.'
-  return (strlen(str) - 3);
-}
-
-int getOpenLocation(FILE *fp, int hash_value, int capacity) {
-  int idx = 0;
-  while (idx != -1) {
-    read_index(fp, hash_value, &idx);
-    hash_value++; // move to the next location.
-    if (hash_value == capacity) { // rollover case
-      hash_value = 0;
-    }
-  }
-  return hash_value;
-}
-
 int main (int argc, char **argv) {
   FILE *fp;
   FILE *fvhs = NULL; //the .vhs file
@@ -41,20 +23,8 @@ int main (int argc, char **argv) {
     exit(-1);
   }
 
-  // Allocate memory for two filename with the ending
-  int l = strlen(argv[1]) + 1;
-  char * filename_khs = calloc(l+1,sizeof(char));
-  char * filename_vhs = calloc(l+1,sizeof(char));
-
-  // Copy the filename string this is the basis for the new name
-  strcpy(filename_khs, argv[1]);
-  strcpy(filename_vhs, argv[1]);
-
-  filename_khs[len_filename_no_ending(argv[1])] = '\0'; // cut off the ".kv"
-  filename_vhs[len_filename_no_ending(argv[1])] = '\0';
-
-  strcat(filename_khs, ".khs");
-  strcat(filename_vhs, ".vhs");
+  char * filename_khs = replace_file_ending(argv[1], ".khs");
+  char * filename_vhs = replace_file_ending(argv[1], ".vhs");
 
   fkhs = fopen(filename_khs, "wb+");
   fvhs = fopen(filename_vhs, "wb+");
