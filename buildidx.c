@@ -27,7 +27,7 @@ int main (int argc, char **argv) {
   FILE *fp;
   FILE *fvhs = NULL; //the .vhs file
   FILE *fkhs = NULL; //the .khs file
-  if (argc != 3){
+  if (argc != 3) {
     fprintf(stderr, "Usage: %s filename.kv capacity\n", argv[0]);
     exit(-1);
   }
@@ -36,14 +36,15 @@ int main (int argc, char **argv) {
   capacity = atol(argv[2]); // Just like atoi there is a-to-long :)
 
   fp = fopen(argv[1], "rb"); // Open filename.kv for reading
-  if (fp == NULL){
+  if (fp == NULL) {
     fprintf(stderr, "Failed to open the file: %s\n", argv[1]);
     exit(-1);
   }
 
   // Allocate memory for two filename with the ending
-  char * filename_khs = malloc(sizeof(argv[1]) + 5 * sizeof(char));
-  char * filename_vhs = malloc(sizeof(argv[1]) + 5 * sizeof(char));
+  int l = strlen(argv[1]) + 1;
+  char * filename_khs = calloc(l+1,sizeof(char));
+  char * filename_vhs = calloc(l+1,sizeof(char));
 
   // Copy the filename string this is the basis for the new name
   strcpy(filename_khs, argv[1]);
@@ -59,6 +60,8 @@ int main (int argc, char **argv) {
   fvhs = fopen(filename_vhs, "wb+");
   if (fkhs == NULL || fvhs == NULL) {
     fprintf(stderr, "%s\n", "Failed to make the .khs or .vhs files");
+    free(filename_khs);
+    free(filename_vhs);
     fclose(fp);
     exit(-1);
   }
