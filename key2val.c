@@ -31,7 +31,24 @@ int main(int argc, char **argv) {
   }
   int capacity = get_capacity(fkhs);
   int search_hash = hashfn(search_term, capacity);
-  printf("%d\n", search_hash);
+  int idx = 0;
+  int i = 0;
+  char key[STRLEN];
+  key[0] = '\0';
+  char val[STRLEN] = "NOT FOUND";
+  while (strcmp(key,search_term) && i < capacity) {
+    read_index(fkhs, search_hash, &idx);
+    read_key(fp, idx, key);
+    search_hash++;
+    if (search_hash == capacity) {
+      search_hash = 0;
+    }
+    i++;
+  }
+  if (i < capacity) {
+    read_val(fp, idx, val);
+  }
+  printf("%s\n", val);
 
   free(filename_khs);
   fclose(fkhs);
