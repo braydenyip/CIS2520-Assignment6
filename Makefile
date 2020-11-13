@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall -pedantic -g
 
-all: buildidx key2val
+all: buildidx key2val val2key
 
 buildidx: buildidx.o hashfn.o util.o assignment6.o
 	$(CC) $(CFLAGS) buildidx.o hashfn.o util.o assignment6.o -o buildidx
@@ -43,4 +43,4 @@ util.o: util.c util.h
 	$(CC) $(CFLAGS) util.c -c
 
 clean:
-	rm *.o buildidx key2val
+	rm *.o buildidx key2val val2key

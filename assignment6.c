@@ -11,12 +11,13 @@ int len_filename_no_ending(char * str) { // returns the index of the '.'
 
 int getOpenLocation(FILE *fp, int hash_value, int capacity) {
   int idx = 0;
+  read_index(fp, hash_value, &idx);
   while (idx != -1) {
-    read_index(fp, hash_value, &idx);
     hash_value++; // move to the next location.
     if (hash_value == capacity) { // rollover case
       hash_value = 0;
     }
+    read_index(fp, hash_value, &idx);
   }
   return hash_value;
 }
