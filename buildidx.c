@@ -11,6 +11,18 @@ int len_filename_no_ending(char * str) { // returns the index of the '.'
   return (strlen(str) - 3);
 }
 
+int getOpenLocation(FILE *fp, int hash_value, int capacity) {
+  int idx = 0;
+  while (idx != -1) {
+    read_index(fp, hash_value, &idx);
+    hash_value++; // move to the next location.
+    if (hash_value == capacity) { // rollover case
+      hash_value = 0;
+    }
+  }
+  return hash_value;
+}
+
 int main (int argc, char **argv) {
   FILE *fp;
   FILE *fvhs = NULL; //the .vhs file
@@ -55,42 +67,28 @@ int main (int argc, char **argv) {
   char value[STRLEN];
   int key_hash, value_hash;
   int i = 0;
-  int idx = 0;
   // write nulls to the new files capacity times
   write_empty(fkhs, capacity);
   write_empty(fvhs, capacity);
 
   // reads the keyval pair until it reaches EOF, at which point read_keyval returns non-2
   while (read_keyval(fp, key, value) == 2) {
-    idx = 0;
+
     // find the hash values
     key_hash = hashfn(key, capacity);
     value_hash = hashfn(value, capacity);
 
-    // write the indexes at the location of the hash values
-    // TODO: make these into a general function?
+    // get the hash locations to write the indices to
 
+    key_hash = getOpenLocation(fkhs, key_hash, capacity);
+    value_hash = getOpenLocation(fvhs, value_hash, capacity);
 
-    while (idx != -1) {
-      read_index(fkhs, key_hash, &idx);
-      key_hash++;
-      if (key_hash == capacity) {
-        key_hash = 0;
-      }
-    }
+    // write the indices at the open hash location, found using linear probing
     write_index(fkhs, i, key_hash);
-    idx = 0;
-    while (idx != -1) {
-      read_index(fvhs, value_hash, &idx);
-      value_hash++;
-      if (value_hash == capacity) {
-        value_hash = 0;
-      }
-    }
     write_index(fvhs, i, value_hash);
     i++;
   }
-  printf("Read %d\n", i);
+
   free(filename_khs);
   free(filename_vhs);
   fclose(fp);
