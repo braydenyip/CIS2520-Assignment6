@@ -3,7 +3,10 @@
 #include <stdio.h>
 #include "util.h"
 #include "hashfn.h"
-#include "assignment6.h"
+
+int len_filename_no_ending(char * str);
+int getOpenLocation(FILE *fp, int hash_value, int capacity);
+char * replace_file_ending(char * fn, char * ending);
 
 int len_filename_no_ending(char * str) { // returns the index of the '.'
   return (strlen(str) - 3);

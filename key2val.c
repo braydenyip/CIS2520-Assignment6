@@ -3,7 +3,23 @@
 #include <string.h>
 #include "hashfn.h"
 #include "util.h"
-#include "assignment6.h"
+
+int len_filename_no_ending(char * str);
+char * replace_file_ending(char * fn, char * ending);
+
+int len_filename_no_ending(char * str) { // returns the index of the '.'
+  return (strlen(str) - 3);
+}
+
+char * replace_file_ending(char * fn, char * ending) {
+  int l = strlen(fn) + 1;
+  char * fn_new = calloc(l+1, sizeof(char));
+  strcpy(fn_new,fn);
+  fn_new[len_filename_no_ending(fn)] = '\0';
+  strcat(fn_new, ending);
+  return fn_new;
+}
+
 
 int main(int argc, char **argv) {
   FILE * fkhs, * fp;
