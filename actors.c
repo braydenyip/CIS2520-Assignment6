@@ -10,5 +10,6 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
+  char[STRLEN] filename = "title.principals.kv";
   return 0;
 }

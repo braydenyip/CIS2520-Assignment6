@@ -43,4 +43,4 @@ util.o: util.c util.h
 	$(CC) $(CFLAGS) util.c -c
 
 clean:
-	rm *.o buildidx key2val val2key
+	rm *.o buildidx key2val val2key *.khs *.vhs
