@@ -68,7 +68,8 @@ int main (int argc, char **argv) {
 
   char key[STRLEN];
   char value[STRLEN];
-  int key_hash, value_hash;
+  int key_hash = 0;
+  int value_hash = 0;
   int i = 0;
   // write nulls to the new files capacity times
   write_empty(fkhs, capacity);

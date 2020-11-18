@@ -58,7 +58,7 @@ int get_capacity( FILE *fp )
   return ftell(fp)/sizeof(int);
 }
 
-int write_index( FILE *fp, int index, int unsigned hash )
+int write_index( FILE *fp, int index, unsigned int hash )
   // write index at the given hash_val in the hash (khs,vhs) file
 {
   fseek( fp, hash*sizeof(int), SEEK_SET );

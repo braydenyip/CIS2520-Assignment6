@@ -51,17 +51,22 @@ int main(int argc, char **argv) {
   int i = 0;
   char val[STRLEN];
   val[0] = '\0';
-  char key[STRLEN] = "NOT FOUND";
-  while (strcmp(val,search_term) && i < capacity) {
+  char key[STRLEN];
+  key[0] = '\0';
+  while (strcmp(val, search_term) && i < capacity) {
     read_index(fvhs, search_hash, &idx);
-    read_val(fp, idx, val);
+    if (idx > -1) {
+      read_val(fp, idx, val);
+    }
     search_hash++;
     if (search_hash == capacity) {
       search_hash = 0;
     }
     i++;
   }
-  if (i < capacity) {
+  if (strcmp(val, search_term)) {
+    strcpy(key, "NOT FOUND");
+  } else {
     read_key(fp, idx, key);
   }
   printf("%s\n", key);
