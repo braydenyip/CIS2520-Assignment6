@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
   val[0] = '\0';
   char key[STRLEN];
   key[0] = '\0';
-  while (strcmp(val, search_term) && i < capacity) {
+  while (strcmp(val, search_term) && i < capacity) { // until one loop or search found
     read_index(fvhs, search_hash, &idx);
     if (idx > -1) {
       read_val(fp, idx, val);
