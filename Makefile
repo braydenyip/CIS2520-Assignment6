@@ -27,12 +27,6 @@ actors: actors.o hashfn.o util.o
 actors.o: actors.c
 	$(CC) $(CFLAGS) actors.c -c
 
-bacon1: bacon1.o hashfn.o util.o
-	$(CC) $(CFLAGS) bacon1.o hashfn.o util.o  -o bacon1
-
-bacon1.o: bacon1.c
-	$(CC) $(CFLAGS) bacon1.c -c
-
 hashfn.o: hashfn.c hashfn.h
 	$(CC) $(CFLAGS) hashfn.c -c
 
