@@ -6,7 +6,8 @@
 
 char * key2val(FILE * fkhs, FILE * fp, char * search_term);
 char * val2key(FILE * fvhs, FILE * fp, char * search_term);
-//char ** key2values(FILE * fkhs, FILE * fp, char * search_term);
+int key2validx(FILE * fkhs, FILE * fp, char * search_term);
+void key2val2(FILE * fkhs, FILE * fp, char * search_term, char * val);
 
 char * key2val(FILE * fkhs, FILE * fp, char * search_term) {
   int capacity = get_capacity(fkhs);
@@ -65,6 +66,51 @@ char * val2key(FILE * fvhs, FILE * fp, char * search_term) {
   return key;
 }
 
+int key2validx(FILE * fkhs, FILE * fp, char * search_term) {
+  int capacity = get_capacity(fkhs);
+  int search_hash = hashfn(search_term, capacity);
+  int idx = 0;
+  int i = 0;
+  char key[STRLEN];
+  key[0] = '\0';
+  while (strcmp(key, search_term) && i < capacity) {
+    read_index(fkhs, search_hash, &idx);
+    if (idx > -1) {
+      read_key(fp, idx, key);
+    }
+    search_hash++;
+    if (search_hash == capacity) {
+      search_hash = 0;
+    }
+    i++;
+  }
+  return idx;
+}
+
+void key2val2(FILE * fkhs, FILE * fp, char * search_term, char * val) {
+  int capacity = get_capacity(fkhs);
+  int search_hash = hashfn(search_term, capacity);
+  int idx = 0;
+  int i = 0;
+  char key[STRLEN];
+  key[0] = '\0';
+  while (strcmp(key, search_term) && i < capacity) {
+    read_index(fkhs, search_hash, &idx);
+    if (idx > -1) {
+      read_key(fp, idx, key);
+    }
+    search_hash++;
+    if (search_hash == capacity) {
+      search_hash = 0;
+    }
+    i++;
+  }
+  if (strcmp(key, search_term)) {
+    strcpy(val, "NOT FOUND");
+  } else {
+    read_val(fp, idx, val);
+  }
+}
 
 int main(int argc, char **argv) {
   if (argc != 2) {
@@ -72,9 +118,9 @@ int main(int argc, char **argv) {
     exit(1);
   }
   char * movie_title = argv[1];
-  char * title_code;
-  char * actor_code;
-  char * actor_name;
+  char * title_code = NULL;
+  char * actor_code = NULL;
+  char * actor_name = NULL;
 
   FILE * title_kv = fopen("title.basics.kv", "rb");
   FILE * title_vhs = fopen("title.basics.vhs", "rb");
@@ -93,10 +139,6 @@ int main(int argc, char **argv) {
     fprintf(stderr, "%s\n", "Error opening a title principals file");
     exit(-1);
   }
-  actor_code = key2val(principals_khs, principals_kv, title_code);
-  fclose(principals_kv);
-  fclose(principals_khs);
-
   FILE * names_kv = fopen("name.basics.kv", "rb");
   FILE * names_khs = fopen("name.basics.khs", "rb");
   if (names_kv == NULL || names_khs == NULL) {
@@ -104,12 +146,26 @@ int main(int argc, char **argv) {
     exit(-1);
   }
 
-  actor_name = key2val(names_khs, names_kv, actor_code);
-  printf("%s\n", actor_name);
+
+  int idx = key2validx(principals_khs, principals_kv, title_code);
+  actor_code = malloc(sizeof(char) * STRLEN);
+  actor_name = malloc(sizeof(char) * STRLEN);
+  char * current_title_code = malloc(sizeof(char) * STRLEN);
+  strcpy(current_title_code, title_code);
+  while (!(strcmp(title_code, current_title_code))) {
+    read_val(principals_kv, idx, actor_code);
+    key2val2(names_khs, names_kv, actor_code, actor_name);
+    printf("%s\n", actor_name);
+    idx++;
+    read_key(principals_kv, idx, current_title_code);
+  }
+  fclose(principals_kv);
+  fclose(principals_khs);
   fclose(names_kv);
   fclose(names_khs);
   free(title_code);
   free(actor_code);
   free(actor_name);
+  free(current_title_code);
   return(0);
 }
